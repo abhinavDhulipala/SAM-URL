@@ -8,12 +8,15 @@ app = Flask(__name__)
 def server_up():
     return render_template('home.html')
 
-@app.route('/some_info')
+
+@app.route('/some_info/<int: id>')
 def some_info():
     params = request.args
     headers = request.headers
-    body = json.loads(request.data.decode('utf-8'))
-    return jsonify(params=params, headers=headers['testHeader'], body=body, code=200, message='success')
+    if not request.is_json:
+        return jsonify('not')
+    body = request.get_json()
+    return jsonify(params=params, headers=headers['testHeader'], body=body, status=201, message='success')
 
 
 if __name__ == '__main__':
