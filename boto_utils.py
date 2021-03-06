@@ -7,6 +7,14 @@ dynamodb = flask_profile.resource('dynamodb')
 
 table_name = TABLE_NAME
 
+"""
+This method will check if a table exists with the given table name.
+@:param t_name -> the name of the table to be checked
+@:returns -> response indicating whether or not table exist
+"""
+def table_exists(t_name):
+    return t_name in map(lambda t: t.name, dynamodb.tables.all())
+
 
 """
 This method will run a one time DB migration. This method will provision our DynamoDB table.
@@ -15,7 +23,7 @@ This method will be used to create a table of urls of the proper schema required
 @:returns -> response indicating success or of table creation
 """
 def migration(t_name=table_name):
-    if t_name in map(lambda t: t.name, dynamodb.tables.all()):
+    if table_exists(t_name):
         print('found prexisting table')
         table = dynamodb.Table(t_name)
         table.delete()
@@ -44,8 +52,7 @@ def migration(t_name=table_name):
     return created_table
 
 
+
 if __name__ == '__main__':
     response = migration()
-    print(response)
-    print(type(response) == dynamodb.Table)
-    print(response.name == table_name)
+    print("Table successfully created!")
