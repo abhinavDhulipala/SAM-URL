@@ -1,5 +1,6 @@
+import os
+import sys
 import unittest
-import os, sys
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
@@ -24,7 +25,7 @@ class TestDynamoPut(unittest.TestCase):
         boto_utils.migration(TEST_TABLE_NAME)
         self.table.wait_until_exists()
 
-        #dummy data
+        # dummy data
         self.original_url = "http://bored.com/"
         self.redirect_url = "https://www.boredbutton.com/"
         self.expiration_date = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%s')
@@ -42,6 +43,7 @@ class TestDynamoPut(unittest.TestCase):
     def test_non_existing_table(self):
         put_response = dynamo_utils.put(self.original_url, self.redirect_url, self.expiration_date, self.user, "NOT_REAL_TABLE")
         self.assertEqual(put_response, False)
+
 
 if __name__ == "__main__":
     unittest.main()
