@@ -52,7 +52,5 @@ def migration(t_name=table_name):
     return created_table
 
 
-
 if __name__ == '__main__':
-    response = migration()
-    print("Table successfully created!")
+    print(migration())
