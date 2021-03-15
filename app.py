@@ -8,7 +8,7 @@ def server_up():
 
 
 @app.route('/home')
-def home_page():
+def home():
     return render_template('home.html')
 
 
