@@ -5,8 +5,6 @@ import unittest
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
-
-import dynamo_utils
 import boto_utils
 import datetime
 from constants import TEST_TABLE_NAME
@@ -17,8 +15,8 @@ Note: May take a long time as it deletes and recreates test table
 """
 class TestDynamoPut(unittest.TestCase):
     def setUp(self) -> None:
-        self.session = dynamo_utils.flask_profile
-        self.dynamodb = dynamo_utils.dynamodb
+        self.session = boto_utils.flask_profile
+        self.dynamodb = boto_utils.dynamodb
 
         # Refresh test_table each test
         self.table = self.dynamodb.Table(TEST_TABLE_NAME)
@@ -32,7 +30,7 @@ class TestDynamoPut(unittest.TestCase):
         self.user = "orangatan"
 
     def test_put_request(self):
-        put_response = dynamo_utils.put(self.original_url, self.redirect_url, self.expiration_date, self.user, TEST_TABLE_NAME)
+        put_response = boto_utils.put(self.original_url, self.redirect_url, self.expiration_date, self.user, TEST_TABLE_NAME)
         check = self.table.get_item(Key={"redirect_url": self.redirect_url})
 
         self.assertEqual(check['Item']["original_url"], self.original_url)
@@ -41,7 +39,7 @@ class TestDynamoPut(unittest.TestCase):
         self.assertEqual(check['Item']["user"], self.user)
 
     def test_non_existing_table(self):
-        put_response = dynamo_utils.put(self.original_url, self.redirect_url, self.expiration_date, self.user, "NOT_REAL_TABLE")
+        put_response = boto_utils.put(self.original_url, self.redirect_url, self.expiration_date, self.user, "NOT_REAL_TABLE")
         self.assertEqual(put_response, False)
 
 

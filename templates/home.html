@@ -4,24 +4,24 @@
 
 {% block body %}
     <div class="jumbotron">
-    <div style="{width: 80%}">
-        <div class="container d-flex justify-content-center bg-light">
-            <h1 class="display-4">Welcome to the home page, please enter a url to shorten</h1>
-        </div>
-        <div class="container d-flex justify-content-center bg-light">
-            <form>
-                <label class="align-middle" for="basic-url">URL to shorten</label>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">https://some.long.url/sha256ish</span>
+        <div style="{width: 80%}">
+            <div class="container d-flex justify-content-center bg-light">
+                <h1 class="display-4">Welcome to the home page, please enter a url to shorten</h1>
+            </div>
+            <div class="container d-flex justify-content-center bg-light">
+                <form >
+                    <label class="align-middle" for="basic-url">URL to shorten</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">https://some.long.url/sha256ish</span>
+                        </div>
+                        <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
                     </div>
-                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-outline-success">Shorten!</button>
-                </div>
-            </form>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-outline-success">Shorten!</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
     </div>
 {% endblock %}
