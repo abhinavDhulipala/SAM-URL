@@ -1,7 +1,7 @@
 import boto3 as b3
 from local_constants import AWS_PROFILE
 from constants import TABLE_NAME
-import datetime
+from datetime import datetime
 
 flask_profile = b3.session.Session(profile_name=AWS_PROFILE)
 dynamodb = flask_profile.resource('dynamodb')
@@ -25,7 +25,7 @@ This method will be used to create a table of urls of the proper schema required
 """
 def migration(t_name=table_name):
     if table_exists(t_name):
-        print('found prexisting table')
+        print('found pre-existing table')
         table = dynamodb.Table(t_name)
         table.delete()
         table.wait_until_not_exists()
