@@ -33,6 +33,7 @@ To build and deploy your application for the first time, run the following in yo
 sam build --use-container
 sam deploy --guided
 ```
+if SAM build above fails try this fix: [```sam build --use-container --docker-network host --debug```](https://stackoverflow.com/questions/60334350/sam-build-use-container-failed-but-sam-build-is-success)
 
 The first command will build the source of your application. The second command will package and deploy your application to AWS, with a series of prompts:
 
