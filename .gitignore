@@ -104,3 +104,4 @@ dist
 pycharm/
 local_constants.py
 .tern-port
+env/
