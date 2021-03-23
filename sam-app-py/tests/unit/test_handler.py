@@ -1,8 +1,12 @@
+import sys
+from os.path import abspath
+
+sys.path.append(abspath('../..'))
+
 import json
-
 import pytest
-
 from hello_world import app
+
 
 
 @pytest.fixture()
@@ -55,19 +59,16 @@ def apigw_event():
             "CloudFront-Forwarded-Proto": "https",
             "Accept-Encoding": "gzip, deflate, sdch",
         },
-        "pathParameters": {"proxy": "/examplepath"},
-        "httpMethod": "POST",
-        "stageVariables": {"baz": "qux"},
+        "httpMethod": "GET",
         "path": "/examplepath",
     }
 
 
-def test_lambda_handler(apigw_event, mocker):
-
+def test_lambda_handler(apigw_event):
     ret = app.lambda_handler(apigw_event, "")
     data = json.loads(ret["body"])
 
     assert ret["statusCode"] == 200
-    assert "message" in ret["body"]
+    assert "message" in data
     assert data["message"] == "hello world"
-    # assert "location" in data.dict_keys()
+    assert data['resource_id'] == '123456'
