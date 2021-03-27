@@ -20,7 +20,7 @@ def apigw_event():
             "resourceId": "123456",
             "apiId": "1234567890",
             "resourcePath": "/{proxy+}",
-            "httpMethod": "POST",
+            "httpMethod": "GET",
             "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
             "accountId": "123456789012",
             "identity": {
@@ -64,7 +64,7 @@ def apigw_event():
     }
 
 
-def test_lambda_handler(apigw_event):
+def test_lambda_handler(apigw_event, mocker):
     ret = app.lambda_handler(apigw_event, "")
     data = json.loads(ret["body"])
 

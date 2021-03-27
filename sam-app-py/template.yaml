@@ -11,6 +11,15 @@ Globals:
     Timeout: 3
 
 Resources:
+  CustomLayer:
+    Type: AWS::Serverless::LayerVersion
+      Properties:
+        ContentUri: my_layer
+        CompatibleRuntimes:
+          - python3.7
+      Metadata:
+        BuildMethod: makefile
+
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -23,6 +32,8 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+      Layers:
+        - !Sub arn:${AWS::Partition}:lambda:${AWS::Region}:123456789012:layer:MyLayer:1
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
