@@ -24,12 +24,12 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
-    # hint 'pathParameters'
+    entry_to_fetch = event['pathParameters']['hash']
     response = {
         "statusCode": 200,
         "body": json.dumps({
             "message": boto_utils.library_loaded(),
-            "hashParam": event['pathParameters']['dynamo_hash']
+            "hashParam": event
         })
     }
     return response
