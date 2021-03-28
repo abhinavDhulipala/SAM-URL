@@ -15,7 +15,6 @@ Note: May take a long time as it deletes and recreates test table
 """
 class TestDynamoPut(unittest.TestCase):
     def setUp(self) -> None:
-        self.session = boto_utils.flask_profile
         self.dynamodb = boto_utils.dynamodb
 
         # Refresh test_table each test
