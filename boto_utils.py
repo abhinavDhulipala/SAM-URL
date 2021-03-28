@@ -1,10 +1,10 @@
 import boto3 as b3
-from local_constants import AWS_PROFILE
+from local_constants import AWS_PROFILE_NAME, AWS_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY_ID
 from constants import TABLE_NAME
 from datetime import datetime
 
-flask_profile = b3.session.Session(profile_name=AWS_PROFILE)
-dynamodb = flask_profile.resource('dynamodb')
+
+dynamodb = b3.resource('dynamodb')
 
 table_name = TABLE_NAME
 
@@ -78,6 +78,10 @@ def put(original_url, redirect_url, expiration_date, user, table_name=TABLE_NAME
     )
 
     return response
+
+
+def library_loaded():
+    return 'congrats! layers have worked properly. Now you can use any home-built boto utils'
 
 
 if __name__ == '__main__':

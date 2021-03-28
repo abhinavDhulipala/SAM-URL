@@ -13,27 +13,26 @@ Globals:
 Resources:
   CustomLayer:
     Type: AWS::Serverless::LayerVersion
-      Properties:
-        ContentUri: my_layer
-        CompatibleRuntimes:
-          - python3.7
-      Metadata:
-        BuildMethod: makefile
-
+    Properties:
+      ContentUri: my_layer
+      CompatibleRuntimes:
+        - python3.8
+    Metadata:
+      BuildMethod: makefile
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: hello_world
       Handler: app.lambda_handler
-      Runtime: python3.7
+      Runtime: python3.8
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
+            Path: /hello/{dynamo_hash}
             Method: get
       Layers:
-        - !Sub arn:${AWS::Partition}:lambda:${AWS::Region}:123456789012:layer:MyLayer:1
+        - !Ref CustomLayer
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

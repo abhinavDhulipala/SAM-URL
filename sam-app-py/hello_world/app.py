@@ -1,6 +1,6 @@
 import json
-import secrets
-
+import boto_utils
+import os
 
 def lambda_handler(event, context):
     """Sample pure Lambda function
@@ -24,11 +24,12 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
+    # hint 'pathParameters'
     response = {
         "statusCode": 200,
         "body": json.dumps({
-            "message": "hello world",
-            "resource_id": event['requestContext']['resourceId']
+            "message": boto_utils.library_loaded(),
+            "hashParam": event['pathParameters']['dynamo_hash']
         })
     }
     return response
