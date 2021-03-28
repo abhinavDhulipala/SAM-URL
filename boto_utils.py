@@ -1,28 +1,28 @@
 import boto3 as b3
-from local_constants import AWS_PROFILE
+from botocore.exceptions import ProfileNotFound
 from constants import TABLE_NAME
 from datetime import datetime
+from local_constants import AWS_PROFILE_NAME
 
-flask_profile = b3.session.Session(profile_name=AWS_PROFILE)
-dynamodb = flask_profile.resource('dynamodb')
+# locally lambda will find a config file, but once deployed it will use cloud context
+try:
+    dynamodb = b3.session.Session(profile_name=AWS_PROFILE_NAME).resource('dynamodb')
+except ProfileNotFound:
+    dynamodb = b3.resource('dynamodb')
 
 table_name = TABLE_NAME
 
-"""
-This method will check if a table exists with the given table name.
-@:param t_name -> the name of the table to be checked
-@:returns -> response indicating whether or not table exist
-"""
+# This method will check if a table exists with the given table name.
+# @:param t_name -> the name of the table to be checked
+# @:returns -> response indicating whether or not table exist
 def table_exists(t_name):
     return t_name in map(lambda t: t.name, dynamodb.tables.all())
 
 
-"""
-This method will run a one time DB migration. This method will provision our DynamoDB table.
-This method will be used to create a table of urls of the proper schema required for CLUrkel
-@:param t_name -> the name of the table to be created 
-@:returns -> response indicating success or of table creation
-"""
+# This method will run a one time DB migration. This method will provision our DynamoDB table.
+# This method will be used to create a table of urls of the proper schema required for CLUrkel
+# @:param t_name -> the name of the table to be created
+# @:returns -> response indicating success or of table creation
 def migration(t_name=table_name):
     if table_exists(t_name):
         print('found pre-existing table')
@@ -52,15 +52,14 @@ def migration(t_name=table_name):
 
     return created_table
 
-"""
-This method will execute put requests to dynamo URL table.
-@:param original_url -> string of original url
-@:param redirect_url -> string of the new url
-@:param expiration_date -> string of the expiration date of the redirect url
-@:param user -> string of user id
-@:param table_name -> string of name of table to be queried (defaults to TABLE_NAME in constants.py)
-@:returns -> response of put request if table exists; returns False otherwise
-"""
+
+# This method will execute put requests to dynamo URL table.
+# @:param original_url -> string of original url
+# @:param redirect_url -> string of the new url
+# @:param expiration_date -> string of the expiration date of the redirect url
+# @:param user -> string of user id
+# @:param table_name -> string of name of table to be queried (defaults to TABLE_NAME in constants.py)
+# @:returns -> response of put request if table exists; returns False otherwise
 def put(original_url, redirect_url, expiration_date, user, table_name=TABLE_NAME):
     if not table_exists(table_name):
         print("That table does not exist!")
@@ -78,6 +77,10 @@ def put(original_url, redirect_url, expiration_date, user, table_name=TABLE_NAME
     )
 
     return response
+
+
+def library_loaded():
+    return 'congrats! layers have worked properly. Now you can use any home-built boto utils'
 
 
 if __name__ == '__main__':
