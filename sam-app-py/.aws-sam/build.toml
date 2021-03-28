@@ -6,7 +6,7 @@ codeuri = "hello_world"
 runtime = "python3.8"
 source_md5 = ""
 packagetype = "Zip"
-functions = ["HelloWorldFunction"]
+functions = ["RedirectFunction"]
 
 [layer_build_definitions]
 [layer_build_definitions.8698bb7a-a358-46ba-a847-f0e9be6dda97]
