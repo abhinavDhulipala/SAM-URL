@@ -1,5 +1,7 @@
 from flask import Flask, render_template, redirect, request, jsonify, url_for, flash
 import secrets
+import boto_utils
+from local_constants import DEPLOYED_GATEWAY
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(128)
@@ -21,6 +23,11 @@ def home():
         return redirect(url_for('home'))
     lambda_url = 'deployed arn'
     return render_template('home.html', link=lambda_url)
+
+
+@app.errorhandler(404)
+def page_not_found():
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':

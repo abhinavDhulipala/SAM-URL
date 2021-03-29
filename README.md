@@ -21,4 +21,5 @@ free to use any other resources or tutorials you find helpful :)
 Please create a local_constants.py file for all environment variables specific to your project, including:
 ``` python
  AWS_PROFILE = '<your_local_profile_name>'
+ DEPLOYED_GATEWAY = 'the.public.url.of.your.function.'
 ```

@@ -1,26 +1,36 @@
 import sys
-import os
+from os.path import abspath
 
-sys.path.append(os.path.abspath('../..'))
-print(os.getcwd())
+sys.path.append(abspath('..'))
+
+print(sys.path)
+
 import json
 import pytest
-from hello_world import app
-
+import boto_utils
+from redirect_handler import app
 
 
 @pytest.fixture()
 def apigw_event():
     """ Generates API GW Event"""
-
-    with open('sam-app-py/events/redirect_simple_event.json') as fp:
+    with open('./events/redirect_simple_event.json') as fp:
         return json.load(fp)
 
-def test_lambda_handler(apigw_event, mocker):
-    ret = app.lambda_handler(apigw_event, "")
-    data = json.loads(ret["body"])
 
-    assert ret["statusCode"] == 200
-    assert "message" in data
-    assert data["message"] == "hello world"
-    assert data['resource_id'] == '123456'
+def test_lambda_handler(apigw_event):
+    # Note put must work. You should have a test entry in your DB under the entry '1234567' for you to pass this test
+    ret = app.lambda_handler(apigw_event, '')
+    data = ret['body']
+
+    assert ret['statusCode'] == 302
+    assert 'location' in ret['headers']
+
+    apigw_event['pathParameters']['hash'] = apigw_event['pathParameters']['hash'][:-1]
+    ret = app.lambda_handler(apigw_event, '')
+    assert ret['statusCode'] in {206, 204}
+
+    apigw_event['pathParameters']['hash'] = 'garbage'
+    ret = app.lambda_handler(apigw_event, '')
+    assert ret['statusCode'] in {206, 204}
+
