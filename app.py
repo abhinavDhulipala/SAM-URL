@@ -4,8 +4,7 @@ import boto_utils
 from local_constants import DEPLOYED_GATEWAY
 
 # necessary for deploying with EBS
-application = Flask(__name__)
-app = application
+app = Flask(__name__)
 app.secret_key = secrets.token_hex(128)
 
 
