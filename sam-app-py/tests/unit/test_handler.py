@@ -26,11 +26,11 @@ def test_lambda_handler(apigw_event):
     assert ret['statusCode'] == 302
     assert 'location' in ret['headers']
 
+    failed_codes = {206, 204}
     apigw_event['pathParameters']['hash'] = apigw_event['pathParameters']['hash'][:-1]
     ret = app.lambda_handler(apigw_event, '')
-    assert ret['statusCode'] in {206, 204}
+    assert ret['statusCode'] in failed_codes
 
     apigw_event['pathParameters']['hash'] = 'garbage'
     ret = app.lambda_handler(apigw_event, '')
-    assert ret['statusCode'] in {206, 204}
-
+    assert ret['statusCode'] in failed_codes
