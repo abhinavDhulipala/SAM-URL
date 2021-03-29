@@ -23,7 +23,7 @@ def lambda_handler(event, context):
 
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
-    entry_to_fetch = event['pathParameters']['hash']
+    entry_to_fetch = event.get('pathParameters', {}).get('hash')
     entry = boto_utils.get(entry_to_fetch)
     if not entry:
         return {
