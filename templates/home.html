@@ -45,10 +45,10 @@
         </div>
     </div>
     <div class="d-flex justify-content-center">
-                    {% if link %}
-                        <div class="alert alert-success " role="alert">
-                            shortened link! <a href="{{ link }}" class="alert-link">{{ link }}</a>
-                        </div>
-                    {% endif %}
-                </div>
+        {% if link %}
+            <div class="alert alert-success " role="alert">
+                shortened link! <a href="{{ link }}" class="alert-link">{{ link }}</a>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
