@@ -6,10 +6,6 @@ from local_constants import DEPLOYED_GATEWAY
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(128)
 
-@app.route('/')
-def server_up():
-    return redirect(url_for('home'))
-
 
 # warning: firefox behavior is undetermined. Use chrome for most consistent performance
 @app.route('/home', methods=['GET', 'POST'])
@@ -21,12 +17,15 @@ def home():
     if not valid_url:
         flash(u'Misformatted url', 'error')
         return redirect(url_for('home'))
-    lambda_url = 'deployed arn'
-    return render_template('home.html', link=lambda_url)
+    random_token = secrets.token_urlsafe(7)
+    # collision prob = 64**7 = 4.3e12 Nearly impossible collision rate
+    # TODO: url timeout and basic auth
+    boto_utils.put(valid_url, random_token, 'unimplemented', 'no user field')
+    return render_template('home.html', link=DEPLOYED_GATEWAY + random_token)
 
 
 @app.errorhandler(404)
-def page_not_found():
+def page_not_found(_):
     return redirect(url_for('home'))
 
 
