@@ -1,36 +1,54 @@
-{% extends "layout.html" %} {% block title %}
-<title>Home</title>
-{% endblock %} {% block body %}
-<div class="center-div jumbotron">
-  <div class="box">
-    <div class="container d-flex justify-content-center bg-light">
-      <h1 class="display-4">
-        Welcome to the home page, please enter a url to shorten
-      </h1>
+{% extends "layout.html" %}
+{% block title %} <title>Home</title> {% endblock %}
+
+{% block body %}
+    <div>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for error in messages %}
+        <div class="alert alert-danger "><strong>Error: {{ error }}</strong></div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
     </div>
-    <div class="container d-flex justify-content-center bg-light">
-      <form>
-        <label class="align-middle" for="basic-url">URL to shorten</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
+    <div class="center-div jumbotron">
+        <div class="box">
+            <div class="container d-flex justify-content-center bg-light">
+                <h1 class="display-4">
+                    Welcome to the home page, please enter a url to shorten
+                </h1>
+            </div>
+            <div class="container d-flex justify-content-center bg-light">
+                <form action="{{ url_for('home') }}" method="post">
+                    <label class="align-middle" for="basic-url">URL to shorten</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon3">
               https://some.long.url/sha256ish
             </span>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            id="basic-url"
-            aria-describedby="basic-addon3"
-          />
+                        </div>
+                        <input
+                                type="text"
+                                class="form-control"
+                                name="basic-url"
+                                aria-describedby="basic-addon3"
+                        />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-outline-success">
+                            Shorten!
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="d-flex justify-content-center">
-          <button type="submit" class="btn btn-outline-success">
-            Shorten!
-          </button>
+        <div>
+            {% if link %}
+                <div>
+                    <a href="{{ link }}" class="btn btn-primary">{{ link }}</a>
+                </div>
+            {% endif %}
         </div>
-      </form>
+
     </div>
-  </div>
-</div>
 {% endblock %}

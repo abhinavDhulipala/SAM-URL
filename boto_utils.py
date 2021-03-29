@@ -10,7 +10,6 @@ try:
 except ProfileNotFound:
     dynamodb = b3.resource('dynamodb')
 
-table_name = TABLE_NAME
 
 # This method will check if a table exists with the given table name.
 # @:param t_name -> the name of the table to be checked
@@ -23,7 +22,7 @@ def table_exists(t_name):
 # This method will be used to create a table of urls of the proper schema required for CLUrkel
 # @:param t_name -> the name of the table to be created
 # @:returns -> response indicating success or of table creation
-def migration(t_name=table_name):
+def migration(t_name=TABLE_NAME):
     if table_exists(t_name):
         print('found pre-existing table')
         table = dynamodb.Table(t_name)
@@ -55,20 +54,20 @@ def migration(t_name=table_name):
 
 # This method will execute put requests to dynamo URL table.
 # @:param original_url -> string of original url
-# @:param redirect_url -> string of the new url
+# @:param redirect_hash -> string of new hash
 # @:param expiration_date -> string of the expiration date of the redirect url
 # @:param user -> string of user id
 # @:param table_name -> string of name of table to be queried (defaults to TABLE_NAME in constants.py)
 # @:returns -> response of put request if table exists; returns False otherwise
-def put(original_url, redirect_url, expiration_date, user, table_name=TABLE_NAME):
-    if not table_exists(table_name):
+def put(original_url: str, redirect_hash: str, expiration_date: str, user: str, t_name=TABLE_NAME):
+    if not table_exists(t_name):
         print("That table does not exist!")
         return False
 
-    table = dynamodb.Table(table_name)
+    table = dynamodb.Table(t_name)
     response = table.put_item(
         Item={
-            'redirect_url': redirect_url,
+            'redirect_url': redirect_hash,
             'original_url': original_url,
             'creation_date': datetime.now().strftime('%s'),
             'expiration_date': expiration_date,
@@ -79,9 +78,20 @@ def put(original_url, redirect_url, expiration_date, user, table_name=TABLE_NAME
     return response
 
 
+# simple utility to get base off of hash
+def get(redirect_url, t_name=TABLE_NAME):
+    if not table_exists(t_name):
+        print("That table does not exist!")
+        return False
+    table = dynamodb.Table(t_name)
+    return table.get_item(Key={
+        'redirect_url': redirect_url
+    }, ProjectionExpression='original_url')
+
+
 def library_loaded():
     return 'congrats! layers have worked properly. Now you can use any home-built boto utils'
 
 
 if __name__ == '__main__':
-    print(migration())
+    print(get('1234567'))

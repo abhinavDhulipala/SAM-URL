@@ -1,6 +1,6 @@
-import json
 import boto_utils
-import os
+import json
+
 
 def lambda_handler(event, context):
     """Sample pure Lambda function
@@ -23,13 +23,21 @@ def lambda_handler(event, context):
 
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
+    entry_to_fetch = event.get('pathParameters', {}).get('hash')
+    entry = boto_utils.get(entry_to_fetch)
+    if not entry:
+        return {
+            'statusCode': 204,
+            'body': json.dumps('Fail: entry does not exist')
+        }
 
-    entry_to_fetch = event['pathParameters']['hash']
-    response = {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": boto_utils.library_loaded(),
-            "hashParam": event
-        })
+    if 'Item' not in entry:
+        return {
+            'statusCode': 206,
+            'body': json.dumps('Fail: incomplete hash')
+        }
+    return {
+        'statusCode': 302,
+        'headers': {'location': entry['Item']['original_url']},
+        'body': 'Success: fetched item'
     }
-    return response
