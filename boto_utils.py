@@ -69,7 +69,7 @@ def put(original_url: str, redirect_hash: str, expiration_date: str, user: str, 
         Item={
             'redirect_url': redirect_hash,
             'original_url': original_url,
-            'creation_date': datetime.now().strftime('%s'),
+            'creation_date': datetime.now().strftime('%S'),
             'expiration_date': expiration_date,
             'user': user
         }
