@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request, jsonify, url_for, f
 import secrets
 import boto_utils
 from local_constants import DEPLOYED_GATEWAY
+import requests
 
 # necessary for deploying with EBS
 app = Flask(__name__)
@@ -15,7 +16,12 @@ def home():
         return render_template('home.html')
     # TODO: change validation to some regex
     valid_url = request.form.get('basic-url')
-    if not valid_url:
+    try: 
+        # will terminate requesting from the website after 3 secs        
+        r = requests.get(valid_url, timeout=3) 
+        r.raise_for_status()
+    except: 
+        print('There was an error getting the request')
         flash(u'Misformatted url', 'error')
         return redirect(url_for('home'))
     random_token = secrets.token_urlsafe(7)
