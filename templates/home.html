@@ -23,16 +23,19 @@
                     <label class="align-middle" for="basic-url">URL to shorten</label>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
+
             <span class="input-group-text" id="basic-addon3">
               https://some.long.url/sha256ish
             </span>
                         </div>
+                        <label for="basic-url"></label>
                         <input
-                                type="text"
+                                type="url"
+                                id="basic-url"
                                 class="form-control"
                                 name="basic-url"
                                 aria-describedby="basic-addon3"
-                                value="https://google.com"
+                                value="https://www.google.com"
                         />
                     </div>
                     <div class="d-flex justify-content-center">
@@ -51,4 +54,5 @@
             </div>
         {% endif %}
     </div>
+    <script src="/static/javascript/validation.js"></script>
 {% endblock %}
