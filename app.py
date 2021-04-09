@@ -5,7 +5,6 @@ from local_constants import DEPLOYED_GATEWAY
 import requests
 from urllib3.exceptions import HTTPError
 
-# necessary for deploying with EBS
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(128)
 
