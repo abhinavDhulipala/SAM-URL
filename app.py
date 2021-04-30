@@ -25,9 +25,8 @@ def home():
     if not_valid:
         flash(u'Misformatted url', 'error')
         return redirect(url_for('home'))
-    random_token = secrets.token_urlsafe(7)
+    # TODO: Part 1
     # collision prob = 64**7 = 4.3e12 Nearly impossible collision rate
-    boto_utils.put(url, random_token, 'unimplemented', 'no user field')
     return render_template('home.html', link=DEPLOYED_GATEWAY + random_token)
 
 

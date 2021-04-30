@@ -29,25 +29,7 @@ def migration(t_name=TABLE_NAME):
         table.delete()
         table.wait_until_not_exists()
 
-    created_table = dynamodb.create_table(
-        TableName=t_name,
-        KeySchema=[
-            {
-                'AttributeName': 'redirect_url',
-                'KeyType': 'HASH'
-            },
-        ],
-        AttributeDefinitions=[
-            {
-                'AttributeName': 'redirect_url',
-                'AttributeType': 'S'
-            }
-        ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5
-        }
-    )
+    # TODO: Part 2
 
     return created_table
 
@@ -64,16 +46,7 @@ def put(original_url: str, redirect_hash: str, expiration_date: str, user: str, 
         print("That table does not exist!")
         return False
 
-    table = dynamodb.Table(t_name)
-    response = table.put_item(
-        Item={
-            'redirect_url': redirect_hash,
-            'original_url': original_url,
-            'creation_date': datetime.now().strftime('%S'),
-            'expiration_date': expiration_date,
-            'user': user
-        }
-    )
+    # TODO: Part 2
 
     return response
 
@@ -83,10 +56,8 @@ def get(redirect_url, t_name=TABLE_NAME):
     if not table_exists(t_name):
         print("That table does not exist!")
         return False
-    table = dynamodb.Table(t_name)
-    return table.get_item(Key={
-        'redirect_url': redirect_url
-    }, ProjectionExpression='original_url')
+    # TODO: Part 2
+    return item
 
 
 def library_loaded():

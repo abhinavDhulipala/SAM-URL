@@ -4,12 +4,10 @@
 {% block body %}
     <div>
     {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for error in messages %}
-        <div class="alert alert-danger "><strong>Error: {{ error }}</strong></div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+        {% for error in messages %}
+            <div class="alert alert-danger "><strong>Error: {{ error }}</strong></div>
+        {% endfor %}
+    {% endwith %}
     </div>
     <div class="center-div jumbotron">
         <div class="box">
