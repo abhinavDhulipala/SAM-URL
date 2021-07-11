@@ -1,10 +1,3 @@
-import sys
-from os.path import abspath
-
-sys.path.append(abspath('..'))
-
-print(sys.path)
-
 import json
 import pytest
 import boto_utils

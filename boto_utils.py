@@ -22,12 +22,17 @@ def table_exists(t_name):
 # This method will be used to create a table of urls of the proper schema required for CLUrkel
 # @:param t_name -> the name of the table to be created
 # @:returns -> response indicating success or of table creation
-def migration(t_name=TABLE_NAME):
+def migration(t_name=TABLE_NAME, force_create=False):
     if table_exists(t_name):
         print('found pre-existing table')
-        table = dynamodb.Table(t_name)
-        table.delete()
-        table.wait_until_not_exists()
+        if force_create:
+            print('deleting existing, and recreating')
+            table = dynamodb.Table(t_name)
+            table.delete()
+            table.wait_until_not_exists()
+        else:
+            print('table found')
+            return dynamodb.Table(TABLE_NAME)
 
     created_table = dynamodb.create_table(
         TableName=t_name,
@@ -78,7 +83,7 @@ def put(original_url: str, redirect_hash: str, expiration_date: str, user: str, 
     return response
 
 
-# simple utility to get base off of hash
+# simple utility to get base URL from hash
 def get(redirect_url, t_name=TABLE_NAME):
     if not table_exists(t_name):
         print("That table does not exist!")
@@ -89,9 +94,6 @@ def get(redirect_url, t_name=TABLE_NAME):
     }, ProjectionExpression='original_url')
 
 
+# method to check whether layers have been loaded in properly
 def library_loaded():
     return 'congrats! layers have worked properly. Now you can use any home-built boto utils'
-
-
-if __name__ == '__main__':
-    print(get('1234567'))

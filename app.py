@@ -4,6 +4,7 @@ import boto_utils
 from local_constants import DEPLOYED_GATEWAY
 import requests
 from urllib3.exceptions import HTTPError
+from requests.exceptions import RequestException
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(128)
@@ -17,9 +18,7 @@ def home():
     url = request.form.get('basic-url')
     try:
         not_valid = requests.get(url, timeout=3).status_code != 200
-    except requests.exceptions.RequestException:
-        not_valid = True
-    except HTTPError:
+    except RequestException or HTTPError:
         not_valid = True
 
     if not_valid:

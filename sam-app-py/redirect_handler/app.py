@@ -34,7 +34,7 @@ def lambda_handler(event, context):
     if 'Item' not in entry:
         return {
             'statusCode': 206,
-            'body': json.dumps('Fail: incomplete hash')
+            'body': json.dumps('Fail: incomplete or incorrect hash')
         }
     return {
         'statusCode': 302,
