@@ -3,6 +3,7 @@ from botocore.exceptions import ProfileNotFound
 from constants import TABLE_NAME
 from datetime import datetime
 from local_constants import AWS_PROFILE_NAME
+from moto import mock_dynamodb2
 
 # locally lambda will find a config file, but once deployed it will use cloud context
 try:
@@ -92,6 +93,11 @@ def get(redirect_url, t_name=TABLE_NAME):
     return table.get_item(Key={
         'redirect_url': redirect_url
     }, ProjectionExpression='original_url')
+
+
+@mock_dynamodb2
+def fetch_mock_table():
+    migration()
 
 
 # method to check whether layers have been loaded in properly
